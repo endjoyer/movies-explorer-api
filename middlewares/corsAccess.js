@@ -4,8 +4,8 @@ module.exports = () => {
   cors({
     origin: [
       'http://localhost:3001',
-      'http://endjoys.project.nomoredomains.rocks',
-      'https://endjoys.project.nomoredomains.rocks',
+      'http://movies.explorer.diploma.nomoreparties.sbs',
+      'https://movies.explorer.diploma.nomoreparties.sbs',
     ],
     credentials: true,
     maxAge: 60,
