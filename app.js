@@ -6,15 +6,16 @@ const rateLimit = require('express-rate-limit');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 const cookieParser = require('cookie-parser');
-const limiterSettings = require('./utils/limiterSettings');
+const { limiterSettings } = require('./utils/constants');
+const { DB_URL } = require('./utils/constants');
+const { notFound } = require('./utils/errorsTest');
 const routesUsers = require('./routes/users');
 const routesCards = require('./routes/movies');
-const { NotFoundError } = require('./errors/index');
+const { NotFoundError } = require('./utils/errors/index');
 const errorMiddleware = require('./middlewares/errorMiddleware');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-const { PORT = 3000, DB_URL = 'mongodb://127.0.0.1:27017/bitfilmsdb' } =
-  process.env;
+const { PORT = 3000 } = process.env;
 const app = express();
 const limiter = rateLimit(limiterSettings);
 
@@ -47,7 +48,7 @@ app.use(routesCards);
 
 app.use(errorLogger);
 
-app.use((req, res, next) => next(new NotFoundError('This page not found')));
+app.use((req, res, next) => next(new NotFoundError(notFound)));
 app.use(errors());
 app.use(errorMiddleware);
 

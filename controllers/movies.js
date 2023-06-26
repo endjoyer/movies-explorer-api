@@ -1,5 +1,15 @@
 const Movie = require('../models/movie');
-const { NotFoundError, ForbiddenError, BadRequestError } = require('../errors');
+const {
+  NotFoundError,
+  ForbiddenError,
+  BadRequestError,
+} = require('../utils/errors');
+const {
+  invalidMovie,
+  noMovie,
+  castObjectId,
+  deleteSomeoneMovie,
+} = require('../utils/errorsTest');
 
 module.exports.getMovies = (req, res, next) => {
   Movie.find({})
@@ -39,7 +49,7 @@ module.exports.createMovie = (req, res, next) => {
     .then((movie) => res.status(201).send(movie))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return next(new BadRequestError('Invalid movie request data'));
+        return next(new BadRequestError(invalidMovie));
       }
 
       return next(err);
@@ -52,14 +62,10 @@ module.exports.deleteMovie = (req, res, next) => {
   Movie.findById(movieId)
     .then((movie) => {
       if (!movie) {
-        return next(
-          new NotFoundError(`There is no movie with id "${movieId}".`),
-        );
+        return next(new NotFoundError(`${noMovie} "${movieId}".`));
       }
       if (movie.owner.toString() !== req.user._id) {
-        return next(
-          new ForbiddenError("You can't delete someone else's movie"),
-        );
+        return next(new ForbiddenError(deleteSomeoneMovie));
       }
       return movie
         .deleteOne()
@@ -68,9 +74,7 @@ module.exports.deleteMovie = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return next(
-          new BadRequestError(`Cast to ObjectId failed ${movieId} ${err}`),
-        );
+        return next(new BadRequestError(castObjectId));
       }
       return next(err);
     });

@@ -9,7 +9,14 @@ const {
   UnauthorizedError,
   BadRequestError,
   ConflictError,
-} = require('../errors');
+} = require('../utils/errors');
+const {
+  noUser,
+  alreadyRegister,
+  castObjectId,
+  invalidUserRequest,
+  incorrect,
+} = require('../utils/errorsTest');
 
 module.exports.getUserInfo = (req, res, next) => {
   let userId;
@@ -23,13 +30,13 @@ module.exports.getUserInfo = (req, res, next) => {
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        return next(new NotFoundError(`There is no user with id "${userId}"`));
+        return next(new NotFoundError(`${noUser} "${userId}"`));
       }
       return res.send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return next(new BadRequestError(`Cast to ObjectId failed`));
+        return next(new BadRequestError(castObjectId));
       }
 
       return next(err);
@@ -57,12 +64,10 @@ module.exports.createUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.code === 11000) {
-        return next(
-          new ConflictError('A user with such a email is already registered'),
-        );
+        return next(new ConflictError(alreadyRegister));
       }
       if (err.name === 'ValidationError') {
-        return next(new BadRequestError('Invalid user request data'));
+        return next(new BadRequestError(invalidUserRequest));
       }
 
       return next(err);
@@ -76,12 +81,12 @@ module.exports.login = (req, res, next) => {
     .select('+password')
     .then((user) => {
       if (!user) {
-        return next(new UnauthorizedError('Incorrect email or password'));
+        return next(new UnauthorizedError(incorrect));
       }
 
       return bcrypt.compare(password, user.password).then((matched) => {
         if (!matched) {
-          return next(new UnauthorizedError('Incorrect email or password'));
+          return next(new UnauthorizedError(incorrect));
         }
         const token = jwt.sign(
           { _id: user._id },
@@ -93,7 +98,11 @@ module.exports.login = (req, res, next) => {
           httpOnly: true,
           sameSite: true,
         });
-        return res.send(user.toJSON());
+        return res.send({
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+        });
       });
     })
     .catch(next);
@@ -104,11 +113,11 @@ module.exports.exit = (req, res) => {
 };
 
 module.exports.patchUserProfile = (req, res, next) => {
-  const id = req.user._id;
+  const userId = req.user._id;
   const { name, about } = req.body;
 
   User.findByIdAndUpdate(
-    id,
+    userId,
     { name, about },
     { new: true, runValidators: true },
   )
@@ -116,11 +125,11 @@ module.exports.patchUserProfile = (req, res, next) => {
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
-        return next(new BadRequestError('Invalid user request data'));
+        return next(new BadRequestError(invalidUserRequest));
       }
 
       if (err.name === 'DocumentNotFoundError') {
-        return next(new NotFoundError(`There is no user with id "${id}"`));
+        return next(new NotFoundError(`${noUser} "${userId}"`));
       }
 
       return next(err);

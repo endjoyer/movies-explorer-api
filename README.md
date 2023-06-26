@@ -38,6 +38,6 @@
 
 ---
 
-[Открыть сайт в браузере](https://movies.explorer.diploma.nomoreparties.sbs)\
-[Публичный сервер - https://endjoys.diploma.nomoreparties.sbs](https://endjoys.diploma.nomoreparties.sbs)\
+[Публичный сервер (Api) - https://endjoys.diploma.nomoreparties.sbs](https://endjoys.diploma.nomoreparties.sbs)\
+[Открыть сайт в браузере](https://movies.explorer.diploma.nomoreparties.sbs)(Frontend часть в разработке)\
 [Ссылка на макет в Figma](<https://www.figma.com/file/LZVRshGiIEmY9Ke8yhluvp/Diploma-(Copy)?type=design&node-id=891-3857&mode=design&t=1aReCFQ52fyf2LyZ-0>)
