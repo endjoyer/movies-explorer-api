@@ -7,6 +7,7 @@ const alreadyRegister = 'A user with such a email is already registered';
 const invalidUserRequest = 'Invalid user request data';
 const incorrect = 'Incorrect email or password';
 const notFound = 'This page not found';
+const authReq = 'Authorization required';
 
 module.exports = {
   invalidMovie,
@@ -18,4 +19,5 @@ module.exports = {
   invalidUserRequest,
   incorrect,
   notFound,
+  authReq,
 };
