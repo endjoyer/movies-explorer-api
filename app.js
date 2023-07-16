@@ -23,8 +23,8 @@ app.use(
   cors({
     origin: [
       'http://localhost:3001',
-      'http://endjoys.project.nomoredomains.rocks',
-      'https://endjoys.project.nomoredomains.rocks',
+      'http://endjoys.diploma.nomoreparties.sbs',
+      'https://endjoys.diploma.nomoreparties.sbs',
     ],
     credentials: true,
     maxAge: 60,
