@@ -44,15 +44,13 @@ module.exports.getUserInfo = (req, res, next) => {
 };
 
 module.exports.createUser = (req, res, next) => {
-  const { name, about, avatar, email, password } = req.body;
+  const { name, email, password } = req.body;
 
   return bcrypt
     .hash(password, 10)
     .then((hash) =>
       User.create({
         name,
-        about,
-        avatar,
         email,
         password: hash,
       }),
@@ -114,11 +112,11 @@ module.exports.exit = (req, res) => {
 
 module.exports.patchUserProfile = (req, res, next) => {
   const userId = req.user._id;
-  const { name, about } = req.body;
+  const { name, email } = req.body;
 
   User.findByIdAndUpdate(
     userId,
-    { name, about },
+    { name, email },
     { new: true, runValidators: true },
   )
     .orFail()
@@ -126,6 +124,10 @@ module.exports.patchUserProfile = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
         return next(new BadRequestError(invalidUserRequest));
+      }
+
+      if (err.code === 11000) {
+        return next(new ConflictError(alreadyRegister));
       }
 
       if (err.name === 'DocumentNotFoundError') {
