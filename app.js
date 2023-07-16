@@ -23,8 +23,8 @@ app.use(
   cors({
     origin: [
       'http://localhost:3001',
-      'http://endjoys.diploma.nomoreparties.sbs',
-      'https://endjoys.diploma.nomoreparties.sbs',
+      'http://movies.explorer.diploma.nomoreparties.sbs',
+      'https://movies.explorer.diploma.nomoreparties.sbs',
     ],
     credentials: true,
     maxAge: 60,
