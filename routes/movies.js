@@ -7,10 +7,10 @@ const {
 } = require('../controllers/movies');
 const { validateAuth } = require('../middlewares/validateAuth');
 
-router.get('/movies', validateAuth, getMovies);
+router.get('/api/v1/movies', validateAuth, getMovies);
 
-router.post('/movies', validateAuth, validateCreateMovie, createMovie);
+router.post('/api/v1/movies', validateAuth, validateCreateMovie, createMovie);
 
-router.delete('/movies/:movieId', validateAuth, deleteMovie);
+router.delete('/api/v1/movies/:movieId', validateAuth, deleteMovie);
 
 module.exports = router;
