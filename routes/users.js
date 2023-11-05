@@ -13,14 +13,19 @@ const {
 } = require('../middlewares/celebrate');
 const { validateAuth } = require('../middlewares/validateAuth');
 
-router.get('/users/me', validateAuth, getUserInfo);
+router.get('/api/v1/users/me', validateAuth, getUserInfo);
 
-router.get('/signout', validateAuth, exit);
+router.get('/api/v1/signout', validateAuth, exit);
 
-router.post('/signup', validateCreateUser, createUser);
+router.post('/api/v1/signup', validateCreateUser, createUser);
 
-router.post('/signin', validateLogin, login);
+router.post('/api/v1/signin', validateLogin, login);
 
-router.patch('/users/me', validateAuth, validateUpdateUser, patchUserProfile);
+router.patch(
+  '/api/v1/users/me',
+  validateAuth,
+  validateUpdateUser,
+  patchUserProfile,
+);
 
 module.exports = router;

@@ -15,7 +15,7 @@ const { NotFoundError } = require('./utils/errors/index');
 const errorMiddleware = require('./middlewares/errorMiddleware');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-const { PORT = 8080 } = process.env;
+// const { PORT = 8080 } = process.env;
 const app = express();
 const limiter = rateLimit(limiterSettings);
 
@@ -52,6 +52,4 @@ app.use((req, res, next) => next(new NotFoundError(notFound)));
 app.use(errors());
 app.use(errorMiddleware);
 
-app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
-});
+module.exports = app;
