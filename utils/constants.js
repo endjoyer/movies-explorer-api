@@ -7,7 +7,7 @@ const limiterSettings = {
   legacyHeaders: false,
 };
 
-const DB_URL = 'mongodb://127.0.0.1:27017/bitfilmsdb';
+const DB_URL = process.env.MONGODB_URI;
 
 module.exports = {
   urlRegex,
