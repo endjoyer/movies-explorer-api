@@ -13,7 +13,7 @@ const {
 } = require('../middlewares/celebrate');
 const { validateAuth } = require('../middlewares/validateAuth');
 
-router.get('/api/v1/users/me', validateAuth, getUserInfo);
+router.get('/api/v1/users/me', getUserInfo);
 
 router.get('/api/v1/signout', validateAuth, exit);
 
